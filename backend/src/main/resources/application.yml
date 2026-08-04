@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/train_booking?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:appuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:appsecret}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+server:
+  port: ${SERVER_PORT:8080}
+
+app:
+  booking:
+    base-fare-per-station: 150
+    route:
+      stations: Colombo Fort,Ragama,Polgahawela,Kandy,Nawalapitiya,Hatton,Ella,Badulla
+      reserved-coach-count: 3
+      total-coach-count: 8
+      seats-per-coach: 3
