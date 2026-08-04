@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+if [ -x "$MAVEN_HOME/bin/mvn" ]; then
+  "$MAVEN_HOME/bin/mvn" "$@"
+elif [ -x "$(command -v mvn)" ]; then
+  mvn "$@"
+else
+  echo 'Maven is required but was not found on PATH.' >&2
+  exit 1
+fi
