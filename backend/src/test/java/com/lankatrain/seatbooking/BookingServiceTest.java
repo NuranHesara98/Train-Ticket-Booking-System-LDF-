@@ -100,4 +100,35 @@ class BookingServiceTest {
             bookingService.createBooking(new com.lankatrain.seatbooking.dto.BookingRequest("Bob", "Colombo Fort", "Badulla", savedSeat.getId()))
         ).isInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    void shouldResetAllBookings() {
+        Station origin = new Station();
+        origin.setName("Colombo Fort");
+        origin.setStationOrder(1);
+        stationRepository.save(origin);
+
+        Station destination = new Station();
+        destination.setName("Badulla");
+        destination.setStationOrder(2);
+        stationRepository.save(destination);
+
+        Coach coach = new Coach();
+        coach.setCoachNumber("R1");
+        coach.setType(CoachType.RESERVED);
+        coach = coachRepository.save(coach);
+
+        Seat seat = new Seat();
+        seat.setCoach(coach);
+        seat.setSeatNumber("R1-01");
+        Seat savedSeat = seatRepository.save(seat);
+
+        bookingService.createBooking(new com.lankatrain.seatbooking.dto.BookingRequest("Alice", "Colombo Fort", "Badulla", savedSeat.getId()));
+
+        var resetResponse = bookingService.resetAllBookings();
+
+        assertThat(resetResponse.deletedCount()).isEqualTo(1);
+        assertThat(bookingService.listBookings()).isEmpty();
+        assertThat(bookingService.findAvailableSeats("Colombo Fort", "Badulla")).hasSize(1);
+    }
 }

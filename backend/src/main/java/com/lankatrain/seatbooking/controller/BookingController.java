@@ -2,6 +2,7 @@ package com.lankatrain.seatbooking.controller;
 
 import com.lankatrain.seatbooking.dto.BookingRequest;
 import com.lankatrain.seatbooking.dto.BookingResponse;
+import com.lankatrain.seatbooking.dto.ResetBookingsResponse;
 import com.lankatrain.seatbooking.dto.SeatResponse;
 import com.lankatrain.seatbooking.service.BookingService;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +34,10 @@ public class BookingController {
     @GetMapping("/available")
     public ResponseEntity<List<SeatResponse>> findAvailableSeats(@RequestParam String origin, @RequestParam String destination) {
         return ResponseEntity.ok(bookingService.findAvailableSeats(origin, destination));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResetBookingsResponse> resetAllBookings() {
+        return ResponseEntity.ok(bookingService.resetAllBookings());
     }
 }

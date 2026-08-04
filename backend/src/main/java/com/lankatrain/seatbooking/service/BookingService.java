@@ -2,6 +2,7 @@ package com.lankatrain.seatbooking.service;
 
 import com.lankatrain.seatbooking.dto.BookingRequest;
 import com.lankatrain.seatbooking.dto.BookingResponse;
+import com.lankatrain.seatbooking.dto.ResetBookingsResponse;
 import com.lankatrain.seatbooking.dto.SeatResponse;
 import com.lankatrain.seatbooking.dto.StationResponse;
 import com.lankatrain.seatbooking.entity.Booking;
@@ -96,6 +97,13 @@ public class BookingService {
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    @Transactional
+    public ResetBookingsResponse resetAllBookings() {
+        long deletedCount = bookingRepository.count();
+        bookingRepository.deleteAllInBatch();
+        return new ResetBookingsResponse(deletedCount, "All bookings have been cleared.");
     }
 
     private BigDecimal calculateFare(int originOrder, int destinationOrder) {
