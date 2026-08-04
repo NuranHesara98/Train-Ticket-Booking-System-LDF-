@@ -90,6 +90,8 @@ A more sophisticated model could track exact departure times and allow bookings 
    - Frontend: http://localhost:4200
    - Backend API: http://localhost:8080
 
+**Note:** Ensure MySQL is running on port 3307 before starting the application. The database and initial data (stations, coaches, seats) are created automatically by the DataSeeder on first startup.
+
 ## Configuration
 
 The system behavior is controlled through `backend/src/main/resources/application.yml`:
@@ -128,11 +130,11 @@ To add a new station or change coach capacity, update these values and restart t
 
 ## Challenges faced
 
-**Database connection issues**
-Initially struggled with MySQL authentication when running in Docker. The solution was to use `host.docker.internal` to connect from the Docker container to the host's MySQL instance, and ensure credentials matched between `.env` and the external MySQL setup.
-
 **Overlap detection logic**
 Getting the SQL query right for detecting overlapping bookings required careful consideration of edge cases (adjacent bookings, same origin/destination). The final query checks if any existing booking on the seat starts before the requested destination and ends after the requested origin.
+
+**Concurrency handling**
+Ensuring that multiple users can attempt to book the same seat simultaneously without double-booking required implementing pessimistic locking at the database level. This guarantees that only one transaction can modify a seat at a time.
 
 ## Security notes
 
